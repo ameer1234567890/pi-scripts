@@ -122,6 +122,7 @@ class S(BaseHTTPRequestHandler):
         
 def run_server(server_class=HTTPServer, handler_class=S, port=HTTP_PORT):
     server_address = ('', port)
+    global httpd
     httpd = server_class(server_address, handler_class)
     print('Starting httpd...')
     httpd.serve_forever()
@@ -137,6 +138,7 @@ if __name__ == '__main__':
     except KeyboardInturrupt:
         cont_check_thread.terminate()
         force_check_thread.terminate()
+        httpd.server_close()
         webreq_check_thread.terminate()
         GPIO.cleanup()
         print('GPIO cleanup done!')
