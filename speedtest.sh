@@ -1,4 +1,4 @@
-maker_key="`cat ~/.maker_key`"
+maker_key="`cat /home/pi/.maker_key`"
 i=0
 while [ ! $ping ]; do
   i=$((i+1))

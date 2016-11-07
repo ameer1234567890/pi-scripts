@@ -1,4 +1,4 @@
-maker_key="`cat ~/.maker_key`"
+maker_key="`cat /home/pi/.maker_key`"
 temp0=$(cat /sys/bus/w1/devices/28-031663113dff/w1_slave | grep 't=' | cut -d '=' -f 2)
 temp1=$(($temp0/1000))
 temp2=$(($temp0/100))

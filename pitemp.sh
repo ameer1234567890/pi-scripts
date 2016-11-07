@@ -1,4 +1,4 @@
-maker_key="`cat ~/.maker_key`"
+maker_key="`cat /home/pi/.maker_key`"
 temp_limit=50
 notify_interval=1800
 
