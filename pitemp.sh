@@ -14,7 +14,7 @@ tempM=$(($temp2 %$temp1))
 temp=$temp1.$tempM
 
 url="https://maker.ifttt.com/trigger/pitemp/with/key/$maker_key?value1=$temp"
-curl $url > /dev/null 2>&1
+curl $url
 
 if [ $temp1 -gt $temp_limit ]; then
   time_now=$(date +%s)
@@ -25,7 +25,7 @@ if [ $temp1 -gt $temp_limit ]; then
   after_interval=$(expr $last_notified + $notify_interval)
   if [ $time_now -gt $after_interval ];then
     url="https://maker.ifttt.com/trigger/pitemp-over/with/key/$maker_key?value1=$temp"
-    curl $url > /dev/null 2>&1
+    curl $url
     date +%s > $last_notified_timestamp
     echo "High & notify - ${temp}°C"
     exit 0

@@ -12,6 +12,6 @@ while [ ! $ping ]; do
   upload=`cat $file | grep Upload | cut -d " " -f 2`
   if [ $ping ]; then
     url="https://maker.ifttt.com/trigger/speedtest/with/key/$maker_key?value1=$ping&value2=$download&value3=$upload"
-    curl $url > /dev/null 2>&1
+    curl $url
   fi
 done

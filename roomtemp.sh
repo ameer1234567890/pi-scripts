@@ -6,4 +6,4 @@ tempM=$(($temp2 %$temp1))
 temp=$temp1.$tempM
 
 url="https://maker.ifttt.com/trigger/roomtemp/with/key/$maker_key?value1=$temp"
-curl $url > /dev/null 2>&1
+curl $url
