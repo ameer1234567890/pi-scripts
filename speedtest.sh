@@ -15,3 +15,6 @@ while [ ! $ping ]; do
     curl $url
   fi
 done
+echo ""
+
+sudo python /home/pi/pi-scripts/speedometer.py
