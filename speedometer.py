@@ -9,6 +9,8 @@ I2C_ADDR = 0x20
 MCP_PINS = [65, 66, 67, 68, 69, 70, 71, 72, 73, 74]
 LOG_FILE = '/home/pi/pi-scripts/speedtest.log'
 WAIT_FOR_FILE = 90
+SPEED_LIMIT = 10
+NUM_LEDS = len(MCP_PINS)
 
 def get_speed():
     global speed
@@ -18,7 +20,7 @@ def get_speed():
             if line:
                 line = line[0].split(': ')[1].split(' Mbit/s')[0]
                 speed = int(math.ceil(float(line)))
-                if speed > 10: speed = 10
+                if speed > SPEED_LIMIT: speed = SPEED_LIMIT
 
 if os.stat(LOG_FILE).st_size == 0:
     print('Empty log file. Retrying after ' + str(WAIT_FOR_FILE) + ' seconds...')
@@ -32,7 +34,11 @@ if os.stat(LOG_FILE).st_size == 0:
 else:
     get_speed()
 
-print('Speed: ' + str(speed))
+print('Speed: ' + str(speed) + ' Mbits/s')
+
+speed_percent = (speed * 100) / SPEED_LIMIT
+leds_lit = (NUM_LEDS * speed_percent) / 100
+print('LEDs lit: ' + str(leds_lit))
 
 wiringpi.wiringPiSetup()
 wiringpi.mcp23017Setup(PIN_BASE,I2C_ADDR)
@@ -42,7 +48,7 @@ for PIN in MCP_PINS:
 
 i = 1
 for PIN in MCP_PINS:
-    if speed >= i:
+    if leds_lit >= i:
         wiringpi.digitalWrite(PIN, 1)
     else:
         wiringpi.digitalWrite(PIN, 0)
