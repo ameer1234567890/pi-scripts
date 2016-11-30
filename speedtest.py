@@ -1,5 +1,5 @@
 import os
-import urllib2
+import requests
 import wiringpi
 import math
 import time
@@ -22,7 +22,7 @@ def main():
             print('Download: ' + str(download))
             print('Upload: ' + str(upload))
             maker_url = "https://maker.ifttt.com/trigger/speedtest/with/key/" + maker_key + "?value1=" + str(ping) + "&value2=" + str(download) + "&value3=" + str(upload)
-            content = urllib2.urlopen(maker_url).read()
+            content = requests.get(maker_url).text
             print(content)
             speedometer(download)
             exit()
