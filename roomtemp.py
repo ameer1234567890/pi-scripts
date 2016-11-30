@@ -1,6 +1,6 @@
 # *-* coding: utf-8 -*-
 import re
-import urllib2
+import requests
 import Adafruit_DHT
 
 dht_sensor = Adafruit_DHT.DHT11
@@ -34,5 +34,5 @@ else:
 
 
 maker_url = "https://maker.ifttt.com/trigger/roomtemp/with/key/" + maker_key + "?value1=" + ds_temp + "&value2=" + str(dht_temp) + "&value3=" + str(dht_humidity)
-content = urllib2.urlopen(maker_url).read()
+content = requests.get(maker_url).text
 print(content)
