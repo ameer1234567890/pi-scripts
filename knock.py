@@ -3,7 +3,7 @@ import RPi.GPIO as GPIO
 import os
 import datetime
 import time
-import urllib2
+import requests
 
 gpio_pin_number=23
 buzzer_pin=22
@@ -18,9 +18,10 @@ while True:
         time.sleep(0.1)
         GPIO.output(buzzer_pin, False)
         print(datetime.datetime.now())
-        content = urllib2.urlopen('http://raspberrypi.local:26337/').read()
+        content = requests.get('http://raspberrypi.local:26337/').text
         print(content)
     except:
         pass
 
 GPIO.cleanup()
+print('GPIO cleanup done!')
