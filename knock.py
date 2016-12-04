@@ -1,6 +1,5 @@
 #!/bin/python
 import RPi.GPIO as GPIO
-import os
 import datetime
 import time
 import requests
