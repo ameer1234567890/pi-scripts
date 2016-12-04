@@ -135,7 +135,7 @@ if __name__ == '__main__':
         force_check_thread.start()
         webreq_check_thread = multiprocessing.Process(target=run_server)
         webreq_check_thread.start()
-    except KeyboardInturrupt:
+    except KeyboardInterrupt:
         cont_check_thread.terminate()
         force_check_thread.terminate()
         httpd.server_close()
