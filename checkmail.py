@@ -129,6 +129,7 @@ def run_server(server_class=HTTPServer, handler_class=S, port=HTTP_PORT):
 
 if __name__ == '__main__':
     try:
+        main()
         cont_check_thread = multiprocessing.Process(target=cont_check)
         cont_check_thread.start()
         force_check_thread = multiprocessing.Process(target=force_check)
