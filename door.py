@@ -86,6 +86,18 @@ class S(BaseHTTPRequestHandler):
             webreq_check_inner_thread.start()
             webreq_check_inner_thread.join()
             self.wfile.write("Done!</p></body></html>")
+        elif self.path == '/status':
+            self.send_response(200)
+            self.send_header('Contecnt-type', 'text/html')
+            self.end_headers()
+            self.wfile.write("<html><body><p>")
+            with open(STATE_FILE, 'r') as fh:
+                state = fh.read()
+            if state == '1':
+                self.wfile.write("Armed")
+            else:
+                self.wfile.write("Disarmed')
+            self.wfile.write("</p></body></html>")
         else:
             self.send_response(404)
             self.send_header('Contecnt-type', 'text/html')
