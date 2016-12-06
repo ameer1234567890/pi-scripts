@@ -96,7 +96,7 @@ class S(BaseHTTPRequestHandler):
             if state == '1':
                 self.wfile.write("Armed")
             else:
-                self.wfile.write("Disarmed')
+                self.wfile.write("Disarmed")
             self.wfile.write("</p></body></html>")
         else:
             self.send_response(404)
