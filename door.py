@@ -106,7 +106,7 @@ if __name__ == '__main__':
         run_server_thread = multiprocessing.Process(target=run_server)
         run_server_thread.start()
     except KeyboardInterrupt:
-        check_door_thread.terminate
+        check_door_thread.terminate()
         httpd.server_close()
         run_server_thread.terminate()
         GPIO.cleanup()
