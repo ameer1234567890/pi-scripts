@@ -8,7 +8,7 @@ import requests
 SENSOR_PIN = 14
 LED_PIN = 15
 STATE_FILE = 'door.state'
-READ_STATE_INTERVAL = 5
+READ_STATE_INTERVAL = 10
 PID_FILE = '/tmp/door.pid'
 HTTP_PORT = 26339
 
@@ -38,6 +38,8 @@ else:
 def check_door():
     try:
         while 1:
+            with open(STATE_FILE, 'r') as fh:
+                state = fh.read()
             if state == '1':
                 GPIO.wait_for_edge(SENSOR_PIN, GPIO.RISING)
                 print('Door movement at %s' % datetime.datetime.now())
@@ -46,7 +48,6 @@ def check_door():
                 print(content)
                 time.sleep(1)
             elif state == '0':
-                print('Not armed')
                 time.sleep(READ_STATE_INTERVAL)
             else:
                 print('Error: State file in unknown state!')
@@ -58,13 +59,11 @@ def arm_sensor():
     with open(STATE_FILE, 'w') as fh:
         fh.write('1')
     GPIO.output(LED_PIN, 1)
-    state = 1
 
 def disarm_sensor():
     with open(STATE_FILE, 'w') as fh:
         fh.write('0')
     GPIO.output(LED_PIN, 0)
-    state = 0
 
 from BaseHTTPServer import BaseHTTPRequestHandler, HTTPServer
 class S(BaseHTTPRequestHandler):
@@ -107,7 +106,7 @@ if __name__ == '__main__':
         run_server_thread = multiprocessing.Process(target=run_server)
         run_server_thread.start()
     except KeyboardInterrupt:
-        check_door_thread.terminate()
+        check_door_thread.terminate
         httpd.server_close()
         run_server_thread.terminate()
         GPIO.cleanup()
