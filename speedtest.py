@@ -63,6 +63,7 @@ def speedometer(speed):
     for PIN in MCP_PINS:
         if leds_lit >= i:
             wiringpi.digitalWrite(PIN, 1)
+            time.sleep(BLINK_SPEED)
         else:
             wiringpi.digitalWrite(PIN, 0)
         i += 1
