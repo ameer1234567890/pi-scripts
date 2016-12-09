@@ -7,6 +7,7 @@ import time
 PIN_BASE = 65
 I2C_ADDR = 0x20
 MCP_PINS = [65, 66, 67, 68, 69, 70, 71, 72, 73, 74]
+MCP_PINS_R = sorted(MCP_PINS, reverse=True)
 SPEED_LIMIT = 10
 NUM_LEDS = len(MCP_PINS)
 BLINK_SPEED = 0.03
@@ -49,6 +50,13 @@ def speedometer(speed):
             time.sleep(BLINK_SPEED)
             NEXT_PIN = PIN + 1
             wiringpi.digitalWrite(NEXT_PIN, 1)
+            wiringpi.digitalWrite(PIN, 0)
+            time.sleep(BLINK_SPEED)
+        for PIN in MCP_PINS_R:
+            wiringpi.digitalWrite(PIN, 1)
+            time.sleep(BLINK_SPEED)
+            PREV_PIN = PIN - 1
+            wiringpi.digitalWrite(PREV_PIN, 1)
             wiringpi.digitalWrite(PIN, 0)
             time.sleep(BLINK_SPEED)
     i = 1
