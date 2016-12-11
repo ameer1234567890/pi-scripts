@@ -1,4 +1,4 @@
-modules=(RPi.GPIO httplib2 google-api-python-client oauth2client Adafruit_DHT wiringpi requests)
+modules=(RPi.GPIO httplib2 google-api-python-client oauth2client wiringpi requests)
 for module in ${modules[@]}; do
     sudo pip install $module
 done
@@ -12,4 +12,4 @@ git clone https://github.com/adafruit/Adafruit_Python_DHT
 cd Adafruit_Python_DHT
 sudo python setup.py install
 cd ..
-rm -rf Adafruit_Python_DHT
+sudo rm -rf Adafruit_Python_DHT
