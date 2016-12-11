@@ -12,34 +12,34 @@ SPEED_LIMIT = 10
 NUM_LEDS = len(MCP_PINS)
 BLINK_SPEED = 0.03
 
-with open("/home/pi/.maker_key", "r") as key_file:
+with open('/home/pi/.maker_key', 'r') as key_file:
     maker_key = key_file.read()
 
 def main():
     for i in range(1,4):
         try:
             ping, download, upload = get_speedtest_results()
-            print('Ping: ' + str(ping))
-            print('Download: ' + str(download))
-            print('Upload: ' + str(upload))
-            maker_url = "https://maker.ifttt.com/trigger/speedtest/with/key/" + maker_key + "?value1=" + str(ping) + "&value2=" + str(download) + "&value3=" + str(upload)
+            print('Ping: %s' % str(ping))
+            print('Download: %s' % str(download))
+            print('Upload: %s' % str(upload))
+            maker_url = 'https://maker.ifttt.com/trigger/speedtest/with/key/' + maker_key + '?value1=' + str(ping) + '&value2=' + str(download) + '&value3=' + str(upload)
             content = requests.get(maker_url).text
             print(content)
             speedometer(download)
             exit()
         except ValueError as err:
             print(err)
-            print('Try ' + str(i) + ' - Trying again....')
+            print('Try %s - Trying again....' % str(i))
             pass
         else:
-            print('Ping: ' + str(ping))
+            print('Ping: %s' % str(ping))
 
 def speedometer(speed):
     if speed > SPEED_LIMIT: speed = SPEED_LIMIT
     speed_percent = (speed * 100) / SPEED_LIMIT
     leds_lit = (NUM_LEDS * speed_percent) / 100
     leds_lit = int(math.ceil(leds_lit))
-    print('LEDs lit: ' + str(leds_lit) + '/' + str(NUM_LEDS))
+    print('LEDs lit: %s/%s' % (str(leds_lit), str(NUM_LEDS)))
     wiringpi.wiringPiSetup()
     wiringpi.mcp23017Setup(PIN_BASE,I2C_ADDR)
     for PIN in MCP_PINS:

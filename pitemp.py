@@ -20,7 +20,7 @@ if os.path.isfile(log_file_path) == False:
 with open(log_file_path, 'r') as log_file:
     time_last_notif = float(log_file.read())
 
-maker_url = "https://maker.ifttt.com/trigger/pitemp/with/key/" + maker_key + "?value1=" + str(cpu_temp)
+maker_url = 'https://maker.ifttt.com/trigger/pitemp/with/key/' + maker_key + '?value1=' + str(cpu_temp)
 content = requests.get(maker_url).text
 print(content)
 
@@ -28,7 +28,7 @@ if cpu_temp > temp_limit:
     time_now = time.time()
     if time_now > time_last_notif + notify_interval:
         print('High and notify - %s°C' % str(cpu_temp))
-        maker_url = "https://maker.ifttt.com/trigger/pitemp-over/with/key/" + maker_key + "?value1=" + str(cpu_temp)
+        maker_url = 'https://maker.ifttt.com/trigger/pitemp-over/with/key/' + maker_key + '?value1=' + str(cpu_temp)
         content = requests.get(maker_url).text
         print(content)
         with open(log_file_path, 'w') as log_file:

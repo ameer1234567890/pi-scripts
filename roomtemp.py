@@ -6,10 +6,10 @@ import Adafruit_DHT
 dht_sensor = Adafruit_DHT.DHT11
 dht_pin = 4
 
-with open("/home/pi/.maker_key", "r") as key_file:
+with open('/home/pi/.maker_key', 'r') as key_file:
     maker_key = key_file.read()
 
-with open("/sys/bus/w1/devices/28-031663113dff/w1_slave", "r") as temp_file:
+with open('/sys/bus/w1/devices/28-031663113dff/w1_slave', 'r') as temp_file:
     for line in temp_file:
         line = re.findall(r't=.*', line)
         if line:
@@ -19,8 +19,8 @@ with open("/sys/bus/w1/devices/28-031663113dff/w1_slave", "r") as temp_file:
 ds_temp1 = ds_temp0 / 1000
 ds_temp2 = ds_temp0 / 100
 ds_tempM = ds_temp2 % ds_temp1
-ds_temp = str(ds_temp1) + "." + str(ds_tempM)
-print("DS Temperature: " + str(ds_temp + "°C"))
+ds_temp = str(ds_temp1) + '.' + str(ds_tempM)
+print('DS Temperature: %s°C' % str(ds_temp))
 
 
 dht_humidity, dht_temp = Adafruit_DHT.read_retry(dht_sensor, dht_pin)
@@ -33,6 +33,6 @@ else:
     print('Failed to get DHT reading. Try again!')
 
 
-maker_url = "https://maker.ifttt.com/trigger/roomtemp/with/key/" + maker_key + "?value1=" + ds_temp + "&value2=" + str(dht_temp) + "&value3=" + str(dht_humidity)
+maker_url = 'https://maker.ifttt.com/trigger/roomtemp/with/key/' + maker_key + '?value1=' + ds_temp + '&value2=' + str(dht_temp) + '&value3=' + str(dht_humidity)
 content = requests.get(maker_url).text
 print(content)

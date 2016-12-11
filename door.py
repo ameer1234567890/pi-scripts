@@ -16,7 +16,7 @@ GPIO.setmode(GPIO.BCM)
 GPIO.setup(LED_PIN, GPIO.OUT)
 GPIO.setup(SENSOR_PIN, GPIO.IN, pull_up_down=GPIO.PUD_DOWN)
 
-with open("/home/pi/.maker_key", "r") as key_file:
+with open('/home/pi/.maker_key', 'r') as key_file:
     maker_key = key_file.read()
 
 with open(PID_FILE, 'w') as fh:
@@ -72,37 +72,37 @@ class S(BaseHTTPRequestHandler):
             self.send_response(200)
             self.send_header('Contecnt-type', 'text/html')
             self.end_headers()
-            self.wfile.write("<html><body><p>Arming door sensor...")
+            self.wfile.write('<html><body><p>Arming door sensor...')
             webreq_check_inner_thread = multiprocessing.Process(target=arm_sensor)
             webreq_check_inner_thread.start()
             webreq_check_inner_thread.join()
-            self.wfile.write("Done!</p></body></html>")
+            self.wfile.write('Done!</p></body></html>')
         elif self.path == '/off':
             self.send_response(200)
             self.send_header('Contecnt-type', 'text/html')
             self.end_headers()
-            self.wfile.write("<html><body><p>Disarming door sensor...")
+            self.wfile.write('<html><body><p>Disarming door sensor...')
             webreq_check_inner_thread = multiprocessing.Process(target=disarm_sensor)
             webreq_check_inner_thread.start()
             webreq_check_inner_thread.join()
-            self.wfile.write("Done!</p></body></html>")
+            self.wfile.write('Done!</p></body></html>')
         elif self.path == '/status':
             self.send_response(200)
             self.send_header('Contecnt-type', 'text/html')
             self.end_headers()
-            self.wfile.write("<html><body><p>")
+            self.wfile.write('<html><body><p>')
             with open(STATE_FILE, 'r') as fh:
                 state = fh.read()
             if state == '1':
-                self.wfile.write("Armed")
+                self.wfile.write('Armed')
             else:
-                self.wfile.write("Disarmed")
-            self.wfile.write("</p></body></html>")
+                self.wfile.write('Disarmed')
+            self.wfile.write('</p></body></html>')
         else:
             self.send_response(404)
             self.send_header('Contecnt-type', 'text/html')
             self.end_headers()
-            self.wfile.write("<html><body><p>Page not found</p></body></html>")
+            self.wfile.write('<html><body><p>Page not found</p></body></html>')
 
 def run_server(server_class=HTTPServer, handler_class=S, port=HTTP_PORT):
     server_address = ('', port)

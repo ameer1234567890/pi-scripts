@@ -5,7 +5,7 @@ PIN = 7
 
 GPIO.setmode(GPIO.BCM)
 GPIO.setup(PIN, GPIO.OUT)
-GPIO.output(PIN,0)
+GPIO.output(PIN, 0)
 
 while 1:
     try:

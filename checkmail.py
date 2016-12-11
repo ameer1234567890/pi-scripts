@@ -109,16 +109,16 @@ class S(BaseHTTPRequestHandler):
             self.send_response(200)
             self.send_header('Contecnt-type', 'text/html')
             self.end_headers()
-            self.wfile.write("<html><body><p>Checking mail...")
+            self.wfile.write('<html><body><p>Checking mail...')
             webreq_check_inner_thread = multiprocessing.Process(target=force_check_now)
             webreq_check_inner_thread.start()
             webreq_check_inner_thread.join()
-            self.wfile.write("Done!</p></body></html>")
+            self.wfile.write('Done!</p></body></html>')
         else:
             self.send_response(404)
             self.send_header('Contecnt-type', 'text/html')
             self.end_headers()
-            self.wfile.write("<html><body><p>Page not found</p></body></html>")
+            self.wfile.write('<html><body><p>Page not found</p></body></html>')
         
 def run_server(server_class=HTTPServer, handler_class=S, port=HTTP_PORT):
     server_address = ('', port)
