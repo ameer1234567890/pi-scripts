@@ -4,7 +4,7 @@ import requests
 import Adafruit_DHT
 
 dht_sensor = Adafruit_DHT.DHT11
-dht_pin = 4
+dht_pin = 18
 
 with open('/home/pi/.maker_key', 'r') as key_file:
     maker_key = key_file.read()
