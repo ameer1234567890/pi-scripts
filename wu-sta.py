@@ -1,5 +1,6 @@
 # *-* coding: utf-8 -*-
 import requests
+import math
 import Adafruit_DHT
 execfile('/home/pi/.wu_config.py')
 from urllib import urlencode
@@ -13,10 +14,19 @@ def c_to_f(input_temp):
     # convert input_temp from Celsius to Fahrenheit
     return (input_temp * 1.8) + 32
 
+def dew_point(celsius, humidity):
+    a = 17.271
+    b = 237.7
+    temp = (a * celsius) / (b + celsius) + math.log(humidity*0.01)
+    dew = (b * temp) / (a - temp)
+    return dew
+
 humidity, temp = Adafruit_DHT.read_retry(SENSOR, PIN)
 
 if humidity is not None and temp is not None:
     print('Temperature: {0:0.1f}°C Humidity: {1:0.1f}%'.format(temp, humidity))
+    dewpoint = dew_point(temp, humidity)
+    print('Dew Point: %s°C' % str(round(dewpoint, 2)))
     print('Uploading data to Weather Underground...')
     # build a weather data object
     weather_data = {
@@ -26,6 +36,7 @@ if humidity is not None and temp is not None:
         'dateutc': 'now',
         'tempf': str(c_to_f(temp)),
         'humidity': str(humidity),
+        'dewptf': str(c_to_f(dewpoint)),
     }
     upload_url = WU_URL + '?' + urlencode(weather_data)
     response = urllib2.urlopen(upload_url)
