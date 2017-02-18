@@ -92,7 +92,11 @@ def cont_check():
 def force_check_now():
     blink_thread = multiprocessing.Process(target=blink_led)
     blink_thread.start()
-    check_mail()
+    force_check_now_thread = multiprocessing.Process(target=check_mail)
+    force_check_now_thread.start()
+    force_check_now_thread.join(10)
+    if force_check_now_thread.is_alive():
+        force_check_now_thread.terminate()
     blink_thread.terminate()
 
 def force_check():
