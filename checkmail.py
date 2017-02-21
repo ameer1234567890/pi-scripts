@@ -104,8 +104,8 @@ def force_check_now():
     force_check_now_thread.join(10)
     if force_check_now_thread.is_alive():
         force_check_now_thread.terminate()
+        error_led()
     blink_thread.terminate()
-    error_led()
 
 def force_check():
     while True:
