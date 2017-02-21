@@ -82,6 +82,13 @@ def blink_led():
         GPIO.output(MAIL_LED, False)
         time.sleep(0.1)
 
+def error_led():
+    for i in range(4):
+        GPIO.output(MAIL_LED, True)
+        time.sleep(1.5)
+        GPIO.output(MAIL_LED, False)
+        time.sleep(0.5)
+
 def cont_check():
     with open(PID_FILE, 'w') as fh:
         fh.write(str(os.getpid()))
@@ -98,6 +105,7 @@ def force_check_now():
     if force_check_now_thread.is_alive():
         force_check_now_thread.terminate()
     blink_thread.terminate()
+    error_led()
 
 def force_check():
     while True:
