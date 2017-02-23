@@ -73,7 +73,7 @@ def check_mail():
     print('Checking gmail...')
     newmails = main()
     if newmails > NEWMAIL_OFFSET:
-        print('%s new emails!' % newmails)
+        print('{} new emails!'.format(newmails))
         GPIO.output(MAIL_LED, True)
     else:
         print('No new emails!')
