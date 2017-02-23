@@ -1,4 +1,5 @@
 # *-* coding: utf-8 -*-
+from __future__ import print_function
 import vcgencmd
 import requests
 import os
@@ -27,13 +28,13 @@ print(content)
 if cpu_temp > temp_limit:
     time_now = time.time()
     if time_now > time_last_notif + notify_interval:
-        print('High and notify - %s°C' % str(cpu_temp))
+        print('High and notify - {}°C'.format(str(cpu_temp)))
         maker_url = 'https://maker.ifttt.com/trigger/pitemp-over/with/key/' + maker_key + '?value1=' + str(cpu_temp)
         content = requests.get(maker_url).text
         print(content)
         with open(log_file_path, 'w') as log_file:
-            log_file.write('%s' % time.time())
+            log_file.write(time.time())
     else:
-        print('High and not notify - %s°C' % str(cpu_temp))
+        print('High and not notify - {}°C'.format(str(cpu_temp)))
 else:
-    print('Not high - %s°C' % str(cpu_temp))
+    print('Not high - {}°C'.format(str(cpu_temp)))
