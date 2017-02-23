@@ -1,9 +1,14 @@
+from __future__ import print_function
 import RPi.GPIO as GPIO
 import os
 import time
 import datetime
 import multiprocessing
 import requests
+try:
+    from BaseHTTPServer import BaseHTTPRequestHandler, HTTPServer
+except ImportError:
+    from http.server import BaseHTTPRequestHandler, HTTPServer
 
 SENSOR_PIN = 14
 LED_PIN = 15
@@ -42,7 +47,7 @@ def check_door():
                 state = fh.read()
             if state == '1':
                 GPIO.wait_for_edge(SENSOR_PIN, GPIO.RISING)
-                print('Door movement at %s' % datetime.datetime.now())
+                print('Door movement at {}'.format(datetime.datetime.now()))
                 maker_url = 'https://maker.ifttt.com/trigger/door/with/key/' + maker_key
                 content = requests.get(maker_url).text
                 print(content)
@@ -65,44 +70,43 @@ def disarm_sensor():
         fh.write('0')
     GPIO.output(LED_PIN, 0)
 
-from BaseHTTPServer import BaseHTTPRequestHandler, HTTPServer
 class S(BaseHTTPRequestHandler):
     def do_GET(self):
         if self.path == '/on':
             self.send_response(200)
             self.send_header('Contecnt-type', 'text/html')
             self.end_headers()
-            self.wfile.write('<html><body><p>Arming door sensor...')
+            self.wfile.write('<html><body><p>Arming door sensor...'.encode('utf-8'))
             webreq_check_inner_thread = multiprocessing.Process(target=arm_sensor)
             webreq_check_inner_thread.start()
             webreq_check_inner_thread.join()
-            self.wfile.write('Done!</p></body></html>')
+            self.wfile.write('Done!</p></body></html>'.encode('utf-8'))
         elif self.path == '/off':
             self.send_response(200)
             self.send_header('Contecnt-type', 'text/html')
             self.end_headers()
-            self.wfile.write('<html><body><p>Disarming door sensor...')
+            self.wfile.write('<html><body><p>Disarming door sensor...'.encode('utf-8'))
             webreq_check_inner_thread = multiprocessing.Process(target=disarm_sensor)
             webreq_check_inner_thread.start()
             webreq_check_inner_thread.join()
-            self.wfile.write('Done!</p></body></html>')
+            self.wfile.write('Done!</p></body></html>'.encode('utf-8'))
         elif self.path == '/status':
             self.send_response(200)
             self.send_header('Contecnt-type', 'text/html')
             self.end_headers()
-            self.wfile.write('<html><body><p>')
+            self.wfile.write('<html><body><p>'.encode('utf-8'))
             with open(STATE_FILE, 'r') as fh:
                 state = fh.read()
             if state == '1':
-                self.wfile.write('Armed')
+                self.wfile.write('Armed'.encode('utf-8'))
             else:
-                self.wfile.write('Disarmed')
-            self.wfile.write('</p></body></html>')
+                self.wfile.write('Disarmed'.encode('utf-8'))
+            self.wfile.write('</p></body></html>'.encode('utf-8'))
         else:
             self.send_response(404)
             self.send_header('Contecnt-type', 'text/html')
             self.end_headers()
-            self.wfile.write('<html><body><p>Page not found</p></body></html>')
+            self.wfile.write('<html><body><p>Page not found</p></body></html>'.encode('utf-8'))
 
 def run_server(server_class=HTTPServer, handler_class=S, port=HTTP_PORT):
     server_address = ('', port)
