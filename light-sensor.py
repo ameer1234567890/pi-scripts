@@ -1,3 +1,4 @@
+from __future__ import print_function
 import requests
 import wiringpi
 import time
@@ -24,7 +25,7 @@ def rc_time (MCP_PIN):
 
 if __name__ == '__main__':
     light_level = rc_time(MCP_PIN)
-    print('Light Level: %s' % str(light_level))
+    print('Light Level: {}'.format(str(light_level)))
     maker_url = 'https://maker.ifttt.com/trigger/light-sensor/with/key/' + maker_key + '?value1=' + str(light_level)
     content = requests.get(maker_url).text
     print(content)
