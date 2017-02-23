@@ -1,3 +1,4 @@
+from __future__ import print_function
 import os
 import requests
 import wiringpi
@@ -19,9 +20,9 @@ def main():
     for i in range(1,4):
         try:
             ping, download, upload = get_speedtest_results()
-            print('Ping: %s' % str(ping))
-            print('Download: %s' % str(download))
-            print('Upload: %s' % str(upload))
+            print('Ping: {}'.format(str(ping)))
+            print('Download: {}'.format(str(download)))
+            print('Upload: {}'.format(str(upload)))
             maker_url = 'https://maker.ifttt.com/trigger/speedtest/with/key/' + maker_key + '?value1=' + str(ping) + '&value2=' + str(download) + '&value3=' + str(upload)
             content = requests.get(maker_url).text
             print(content)
@@ -29,17 +30,17 @@ def main():
             exit()
         except ValueError as err:
             print(err)
-            print('Try %s - Trying again....' % str(i))
+            print('Try {} - Trying again....'.format(str(i)))
             pass
         else:
-            print('Ping: %s' % str(ping))
+            print('Ping: {}'.format(str(ping)))
 
 def speedometer(speed):
     if speed > SPEED_LIMIT: speed = SPEED_LIMIT
     speed_percent = (speed * 100) / SPEED_LIMIT
     leds_lit = (NUM_LEDS * speed_percent) / 100
     leds_lit = int(math.ceil(leds_lit))
-    print('LEDs lit: %s/%s' % (str(leds_lit), str(NUM_LEDS)))
+    print('LEDs lit: {}/{}'.format(str(leds_lit), str(NUM_LEDS)))
     wiringpi.wiringPiSetup()
     wiringpi.mcp23017Setup(PIN_BASE,I2C_ADDR)
     for PIN in MCP_PINS:
