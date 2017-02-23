@@ -4,8 +4,6 @@ import requests
 import Adafruit_DHT
 import math
 execfile('/home/pi/.wu_config.py')
-from urllib import urlencode
-import urllib2
 
 DHT_SENSOR = Adafruit_DHT.DHT11
 DHT_PIN = 18
@@ -45,7 +43,7 @@ if dht_humidity is not None and dht_temp is not None:
     dewpoint = dew_point(int(float(ds_temp)), dht_humidity)
     print('Dew Point: %s°C' % str(round(dewpoint, 2)))
 
-	# Post to Weather Underground PWS (Personal Weather Station)
+    # Post to Weather Underground PWS (Personal Weather Station)
     print('Uploading data to Weather Underground...')
     weather_data = {
         'action': 'updateraw',
@@ -56,17 +54,16 @@ if dht_humidity is not None and dht_temp is not None:
         'humidity': str(dht_humidity),
         'dewptf': str(c_to_f(dewpoint)),
     }
-    upload_url = WU_URL + '?' + urlencode(weather_data)
-    response = urllib2.urlopen(upload_url)
-    html = response.read()
-    print('Server response: ' + html)
-    response.close()
+    s = requests.Session()
+    s.params = (weather_data)
+    r = s.get(WU_URL)
+    print("Status: %s" % r.text)
 
-	# Post to Google Spreadsheet via IFTTT
+    # Post to Google Spreadsheet via IFTTT
     print('Triggerring IFTTT event...')
     maker_url = 'https://maker.ifttt.com/trigger/roomtemp/with/key/' + maker_key + '?value1=' + ds_temp + '&value2=' + str(dht_humidity) + '&value3=' + str(round(dewpoint, 2))
-    content = requests.get(maker_url).text
-    print(content)
+    r = requests.get(maker_url)
+    print(r.text)
 else:
     dht_temp = 0
     dht_humidity = 0
