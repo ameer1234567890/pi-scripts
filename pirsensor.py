@@ -3,12 +3,12 @@ import RPi.GPIO as GPIO
 
 GPIO.setmode(GPIO.BCM)
 
-LED_ONE = 8
-LED_TWO = 11
+LED = 8
+BUZZER = 11
 GPIO_PIR = 9
 
-GPIO.setup(LED_ONE, GPIO.OUT)
-GPIO.setup(LED_TWO, GPIO.OUT)
+GPIO.setup(LED, GPIO.OUT)
+GPIO.setup(BUZZER, GPIO.OUT)
 
 print('PIR Sensor is running! (CTRL+C to exit)')
 GPIO.setup(GPIO_PIR, GPIO.IN)
@@ -25,13 +25,14 @@ try:
         if status0 == 1 and status1 == 0:
             num = num + 1
             print('Warning, I\'ve detected a movement for {} time(s)'.format(num))
-            GPIO.output(LED_ONE, True)
-            GPIO.output(LED_TWO, True)
+            GPIO.output(LED, True)
+            GPIO.output(BUZZER, True)
+            time.sleep(0.2)
+            GPIO.output(BUZZER, False)
             status1 = 1
         elif status0 == 0 and status1 == 1:
             print('Ready to start!')
-            GPIO.output(LED_ONE, False)
-            GPIO.output(LED_TWO, False)
+            GPIO.output(LED, False)
             status1 = 0
         time.sleep(0.01)
 except KeyboardInterrupt:
