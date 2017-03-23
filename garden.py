@@ -44,7 +44,7 @@ def heat_index(temperature, humidity):
 
 humidity, temperature = Adafruit_DHT.read_retry(SENSOR, DHT_PIN)
 if humidity is not None and temperature is not None:
-    print('Temp={0:0.1f}°C  Humidity={1:0.1f}%'.format(temperature, humidity))
+    print('Temp={0:0.2f}°C  Humidity={1:0.2f}%'.format(temperature, humidity))
     dewpoint = dew_point(temperature, humidity)
     print('Dew Point: {}°C'.format(str(round(dewpoint, 2))))
     heatindex = heat_index(temperature, humidity)
@@ -52,7 +52,7 @@ if humidity is not None and temperature is not None:
 	
     # Post to ThingSpeak
     print('Posting to ThingSpeak...')
-    channel_url = 'https://api.thingspeak.com/update?api_key=' + Config.CHANNEL_KEY + '&field1=' + str(temperature) + '&field2=' + str(humidity) + '&field3=' + str(round(dewpoint, 2)) + '&field4=' + str(round(heatindex, 2))
+    channel_url = 'https://api.thingspeak.com/update?api_key=' + Config.CHANNEL_KEY + '&field1=' + str(round(temperature, 2)) + '&field2=' + str(round(humidity, 2)) + '&field3=' + str(round(dewpoint, 2)) + '&field4=' + str(round(heatindex, 2))
     r = requests.get(channel_url)
     print(r.text)
 else:
