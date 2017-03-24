@@ -2,11 +2,16 @@
 from __future__ import print_function
 import requests
 import math
+import time
+import RPi.GPIO as GPIO
 import Adafruit_DHT
 exec(open('/home/pi/.thingspeak_config.py').read())
 
 SENSOR = Adafruit_DHT.DHT22
 DHT_PIN = 24
+LDR_PIN = 18
+
+GPIO.setmode(GPIO.BCM)
 
 def c_to_f(input_temp):
     # convert input_temp from Celsius to Fahrenheit
@@ -42,6 +47,19 @@ def heat_index(temperature, humidity):
     heat_index = p1 + p2 + p3
     return f_to_c(heat_index)
 
+def rc_time(pin):
+    count = 0
+    GPIO.setup(pin, GPIO.OUT)
+    GPIO.output(pin, 0)
+    time.sleep(0.1)
+    GPIO.setup(pin, GPIO.IN)
+    while (GPIO.input(pin) == 0):
+        count += 1
+    return count
+
+light_level = rc_time(LDR_PIN)
+print('Light Level: {}'.format(str(light_level)))
+
 humidity, temperature = Adafruit_DHT.read_retry(SENSOR, DHT_PIN)
 if humidity is not None and temperature is not None:
     print('Temp={0:0.2f}°C  Humidity={1:0.2f}%'.format(temperature, humidity))
@@ -52,7 +70,7 @@ if humidity is not None and temperature is not None:
 	
     # Post to ThingSpeak
     print('Posting to ThingSpeak...')
-    channel_url = 'https://api.thingspeak.com/update?api_key=' + Config.CHANNEL_KEY + '&field1=' + str(round(temperature, 2)) + '&field2=' + str(round(humidity, 2)) + '&field3=' + str(round(dewpoint, 2)) + '&field4=' + str(round(heatindex, 2))
+    channel_url = 'https://api.thingspeak.com/update?api_key=' + Config.CHANNEL_KEY + '&field1=' + str(round(temperature, 2)) + '&field2=' + str(round(humidity, 2)) + '&field3=' + str(round(dewpoint, 2)) + '&field4=' + str(round(heatindex, 2)) + '&field5=' + str(light_level)
     r = requests.get(channel_url)
     print(r.text)
 else:
