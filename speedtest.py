@@ -26,7 +26,8 @@ def main():
             maker_url = 'https://maker.ifttt.com/trigger/speedtest/with/key/' + maker_key + '?value1=' + str(ping) + '&value2=' + str(download) + '&value3=' + str(upload)
             content = requests.get(maker_url).text
             print(content)
-            speedometer(download)
+            #speedometer(download)
+            os.system('sudo python speedoled.py ' + str(download) + ' ' + str(upload))
             exit()
         except ValueError as err:
             print(err)
