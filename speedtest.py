@@ -27,7 +27,7 @@ def main():
             content = requests.get(maker_url).text
             print(content)
             #speedometer(download)
-            os.system('sudo python speedoled.py ' + str(download) + ' ' + str(upload))
+            os.system('sudo python /home/pi/pi-scripts/speedoled.py ' + str(download) + ' ' + str(upload))
             exit()
         except ValueError as err:
             print(err)
