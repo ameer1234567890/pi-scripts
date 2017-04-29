@@ -8,7 +8,13 @@
 * Interfacing Options > enable SSH and i2c
 * Overclock to `Turbo`
 * Advanced Options > Expand Filesystem
-* Add network configuration at `/etc/wpa_supplicant/wpa_supplicant.conf`
+* Add network configuration at `/etc/wpa_supplicant/wpa_supplicant.conf` as below:
+```
+network={
+    ssid="Tenda_5408C0"
+    psk="password"
+}
+```
 * Add `consoleblank=0` to the end of `/boot/cmdline.txt`
 * Uncomment `LEDS=+num` in `/etc/kbd/config`
 * `mkdir ~/.ssh`
