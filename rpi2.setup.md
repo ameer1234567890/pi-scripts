@@ -9,6 +9,7 @@
 * Interfacing Options > enable SSH and i2c
 * Overclock to `Turbo`
 * Advanced Options > Expand Filesystem
+* `sudo reboot`
 * Add network configuration at `/etc/wpa_supplicant/wpa_supplicant.conf` as below:
 ```
 network={
