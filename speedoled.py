@@ -3,6 +3,8 @@ import Adafruit_SSD1306
 from PIL import Image
 from PIL import ImageDraw
 from PIL import ImageFont
+import datetime
+import time
 import argparse
 
 parser = argparse.ArgumentParser(description='Example with non-optional arguments')
@@ -53,7 +55,8 @@ disp.clear()
 
 # Write two lines of text.
 draw.text((x, top),    'Down Speed: {} Mbps'.format(results.downspeed),  font=font, fill=255)
-draw.text((x, top+20), 'Up Speed: {} Mbps'.format(results.upspeed), font=font, fill=255)
+draw.text((x, top+10), 'Up Speed: {} Mbps'.format(results.upspeed), font=font, fill=255)
+draw.text((x, top+22), 'T: {}'.format(time.strftime('%Y-%m-%d %H:%M')), font=font, fill=255)
 
 # Display image.
 disp.image(image)
