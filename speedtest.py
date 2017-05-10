@@ -1,13 +1,14 @@
 from __future__ import print_function
 import os
 import requests
-import wiringpi
 import math
 import time
+import Adafruit_GPIO as GPIO
+import Adafruit_GPIO.MCP230xx as MCP230xx
 
-PIN_BASE = 65
+PIN_BASE = 0
 I2C_ADDR = 0x20
-MCP_PINS = [65, 66, 67, 68, 69, 70, 71, 72, 73, 74]
+MCP_PINS = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9]
 MCP_PINS_R = sorted(MCP_PINS, reverse=True)
 SPEED_LIMIT = 10
 NUM_LEDS = len(MCP_PINS)
@@ -26,7 +27,7 @@ def main():
             maker_url = 'https://maker.ifttt.com/trigger/speedtest/with/key/' + maker_key + '?value1=' + str(ping) + '&value2=' + str(download) + '&value3=' + str(upload)
             content = requests.get(maker_url).text
             print(content)
-            #speedometer(download)
+            speedometer(download)
             os.system('sudo python /home/pi/pi-scripts/speedoled.py ' + str(download) + ' ' + str(upload))
             exit()
         except ValueError as err:
@@ -42,32 +43,32 @@ def speedometer(speed):
     leds_lit = (NUM_LEDS * speed_percent) / 100
     leds_lit = int(math.ceil(leds_lit))
     print('LEDs lit: {}/{}'.format(str(leds_lit), str(NUM_LEDS)))
-    wiringpi.wiringPiSetup()
-    wiringpi.mcp23017Setup(PIN_BASE,I2C_ADDR)
+    mcp = MCP230xx.MCP23017()
     for PIN in MCP_PINS:
-        wiringpi.pinMode(PIN, 1)
+        mcp.setup(PIN, GPIO.OUT)
     for i in range(0, 10):
         for PIN in MCP_PINS:
-            wiringpi.digitalWrite(PIN, 1)
+            mcp.output(PIN, 1)
             time.sleep(BLINK_SPEED)
             NEXT_PIN = PIN + 1
-            wiringpi.digitalWrite(NEXT_PIN, 1)
-            wiringpi.digitalWrite(PIN, 0)
+            mcp.output(NEXT_PIN, 1)
+            mcp.output(PIN, 0)
             time.sleep(BLINK_SPEED)
         for PIN in MCP_PINS_R:
-            wiringpi.digitalWrite(PIN, 1)
+            mcp.output(PIN, 1)
             time.sleep(BLINK_SPEED)
             PREV_PIN = PIN - 1
-            wiringpi.digitalWrite(PREV_PIN, 1)
-            wiringpi.digitalWrite(PIN, 0)
-            time.sleep(BLINK_SPEED)
+            if (PREV_PIN != -1):
+                mcp.output(PREV_PIN, 1)
+                mcp.output(PIN, 0)
+                time.sleep(BLINK_SPEED)
     i = 1
     for PIN in MCP_PINS:
         if leds_lit >= i:
-            wiringpi.digitalWrite(PIN, 1)
+            mcp.output(PIN, 1)
             time.sleep(BLINK_SPEED)
         else:
-            wiringpi.digitalWrite(PIN, 0)
+            mcp.output(PIN, 0)
         i += 1
 
 def get_speedtest_results():
