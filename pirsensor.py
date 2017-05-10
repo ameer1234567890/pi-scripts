@@ -19,6 +19,7 @@ PID_FILE = '/tmp/pirsensor.pid'
 HTTP_PORT = 7000
 NOTIFY_INTERVAL = 30
 LOG_FILE = 'pirsensor.log'
+MY_PHONE_HOSTNAME = 'nexus5x.lan'
 
 
 GPIO.setup(STATE_LED, GPIO.OUT)
@@ -73,12 +74,16 @@ def check_pir():
                     with open(LOG_FILE, 'r') as fh:
                         time_last_notif = float(fh.read())
                     if time_now > time_last_notif + NOTIFY_INTERVAL:
-                        print('Notifying about movement')
-                        maker_url = 'https://maker.ifttt.com/trigger/pir-movement/with/key/' + maker_key
-                        content = requests.get(maker_url).text
-                        print(content)
-                        with open(LOG_FILE, 'w') as fh:
-                          fh.write('%s' % time.time())
+                        response = os.system("ping -c 1 " + MY_PHONE_HOSTNAME)
+                        if response == 0:
+                            print('Not notifying since you are home!')
+                        else:
+                            print('Notifying about movement')
+                            maker_url = 'https://maker.ifttt.com/trigger/pir-movement/with/key/' + maker_key
+                            content = requests.get(maker_url).text
+                            print(content)
+                            with open(LOG_FILE, 'w') as fh:
+                                fh.write('%s' % time.time())
                     else:
                         print('Not notifying yet!')
                 else:
