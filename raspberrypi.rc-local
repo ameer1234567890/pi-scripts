@@ -1,4 +1,3 @@
-```
 #!/bin/sh -e
 #
 # rc.local
@@ -30,4 +29,3 @@ sudo python /home/pi/web-irsend/remote.py >> /tmp/web-irsend.log 2>&1 &
 #sudo python /home/pi/pi-scripts/tempoled.py &
 
 exit 0
-```
