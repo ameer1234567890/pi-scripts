@@ -5,6 +5,7 @@
 
 #### Important Links
 * Replace Dropbear by openssh-server: https://wiki.openwrt.org/inbox/replacingdropbearbyopensshserver
+* SFTP Server: https://wiki.openwrt.org/doc/howto/sftp.server
 * Configure a guest WLAN: https://wiki.openwrt.org/doc/recipes/guest-wlan-webinterface
 * Attach functions to a push button: https://wiki.openwrt.org/doc/howto/hardware.button
 * Enabling remote SSH access: http://blog.differentpla.net/blog/2015/05/27/openwrt-ssh-wan
