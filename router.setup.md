@@ -3,6 +3,14 @@
 * SOC: MediaTek MT7620N
 * OpenWRT Page: https://wiki.openwrt.org/toh/zbt/wr8305rt
 
+#### Notify on router startup (via IFTTT)
+Add below line to `/etc/rc.local` or under **_Local Startup_** in **_System > Startup_** in LuCI
+
+```shell
+sleep 14
+wget -O - http://maker.ifttt.com/trigger/router-reboot/with/key/hAVKuiLxTZFFNyiGtd1FubyVsOwTOHzWzJocBA0dCJs
+```
+
 #### Important Links
 * Replace Dropbear by openssh-server: https://wiki.openwrt.org/inbox/replacingdropbearbyopensshserver
 * SFTP Server: https://wiki.openwrt.org/doc/howto/sftp.server
