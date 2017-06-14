@@ -43,3 +43,10 @@ opkg install openssh-sftp-server
 #### Important Links
 * Configure a guest WLAN: https://wiki.openwrt.org/doc/recipes/guest-wlan-webinterface
 * Enabling remote management: https://aiotutorials.wordpress.com/2016/06/28/openwrt-remote-access/
+* USB Basic Support: https://wiki.openwrt.org/doc/howto/usb.essentials
+* USB Storage: https://wiki.openwrt.org/doc/howto/usb.storage
+* Partitioning, Formatting and Mounting Storage Devices: https://wiki.openwrt.org/doc/howto/storage
+* Setting up a USB drive for storage on OpenWRT: http://www.brendangrainger.com/entries/13
+* Samba (smb): https://wiki.openwrt.org/doc/uci/samba
+* Share USB Hard-drive with Samba using the Luci web-interface: https://wiki.openwrt.org/doc/recipes/usb-storage-samba-webinterface
+* 
