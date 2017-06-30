@@ -14,11 +14,11 @@ GPIO.setmode(GPIO.BCM)
 STATE_LED = 8
 BUZZER = 11
 GPIO_PIR = 9
-STATE_FILE = 'pirsensor.state'
+STATE_FILE = '/home/pi/pi-scripts/pirsensor.state'
 PID_FILE = '/tmp/pirsensor.pid'
 HTTP_PORT = 7000
 NOTIFY_INTERVAL = 30
-LOG_FILE = 'pirsensor.log'
+LOG_FILE = '/home/pi/pi-scripts/pirsensor.log'
 MY_PHONE_HOSTNAME = '192.168.7.104'
 
 
