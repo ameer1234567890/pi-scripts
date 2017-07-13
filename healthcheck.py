@@ -46,4 +46,4 @@ else:
         with open(EVENTS_FILE, 'a') as fh:
             fh.write('{} Rebooting due to unavailability of internet connection.\n'.format(datetime.datetime.now()))
         print('Rebooting...')
-        #os.system('sudo reboot')
+        os.system('sudo reboot')
