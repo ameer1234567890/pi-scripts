@@ -1,5 +1,5 @@
 # Install build tools
-sudo apt-get install build-essential python-dev libjpeg-dev
+sudo apt-get install build-essential python-dev libjpeg-dev speedtest-cli
 
 modules=(RPi.GPIO httplib2 google-api-python-client oauth2client requests Pillow psutil)
 for module in ${modules[@]}; do
