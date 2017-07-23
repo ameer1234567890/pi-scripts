@@ -1,3 +1,6 @@
+# Install build tools
+sudo apt-get install build-essential python-dev libjpeg-dev
+
 modules=(RPi.GPIO httplib2 google-api-python-client oauth2client requests Pillow psutil)
 for module in ${modules[@]}; do
     sudo pip3 install $module
@@ -6,7 +9,6 @@ done
 #vcgencmd
 sudo pip3 install git+https://github.com/nicmcd/vcgencmd.git
 
-# Install build tools
 sudo apt-get install build-essential python-dev
 
 #Adafruit-DHT
