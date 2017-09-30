@@ -4,7 +4,7 @@ import os
 import time
 
 PIN = 17
-ROUTER_IP = '192.168.7.10'
+ROUTER_IP = '192.168.7.1'
 
 print('Checking connectivity...')
 response = os.system('ping -c 1 ' + ROUTER_IP + ' >> /dev/null 2>&1')
