@@ -8,23 +8,23 @@ PIN = 17
 ROUTER_IP = '192.168.7.1'
 LOG_FILE = '/home/pi/pi-scripts/routercheck.log'
 
-print('Checking connectivity...')
+print('{} Checking connectivity...'.format(datetime.datetime.now()))
 response = os.system('ping -c 1 ' + ROUTER_IP + ' >> /dev/null 2>&1')
 
 if response == 0:
     print('Router is OK!')
 else:
-    print('Either router is not working or Wifi is down. Rebooting Wifi...')
+    print('{} Either router is not working or Wifi is down. Rebooting Wifi...'.format(datetime.datetime.now()))
     wlan_if = os.popen('ifconfig | grep wl | cut -d : -f 1').read()
     os.system('sudo ifdown ' + wlan_if)
     os.system('sudo ifup ' + wlan_if)
     time.sleep(1)
-    print('Checking connectivity...')
+    print('{} Checking connectivity...'.format(datetime.datetime.now()))
     response = os.system('ping -c 1 ' + ROUTER_IP + '>> /dev/null 2>&1')
     if response == 0:
-        print('Router was OK! Wifi was down! Now OK!')
+        print('{} Router was OK! Wifi was down! Now OK!'.format(datetime.datetime.now()))
     else:
-        print('Router is actually down! Rebooting router now...')
+        print('{} Router is actually down! Rebooting router now...'.format(datetime.datetime.now()))
         with open(LOG_FILE, 'a') as fh:
           fh.write('{} Rebooting router!\n'.format(datetime.datetime.now()))
         GPIO.setmode(GPIO.BCM)
