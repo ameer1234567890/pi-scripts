@@ -14,6 +14,7 @@ GPIO.setmode(GPIO.BCM)
 STATE_LED = 8
 BUZZER = 11
 GPIO_PIR = 9
+BUTTON = 15
 STATE_FILE = '/home/pi/pi-scripts/pirsensor.state'
 PID_FILE = '/tmp/pirsensor.pid'
 HTTP_PORT = 7000
@@ -24,6 +25,7 @@ MY_PHONE_HOSTNAME = '192.168.7.104'
 
 GPIO.setup(STATE_LED, GPIO.OUT)
 GPIO.setup(BUZZER, GPIO.OUT)
+GPIO.setup(BUTTON, GPIO.IN, pull_up_down=GPIO.PUD_UP)
 
 with open('/home/pi/.maker_key', 'r') as key_file:
     maker_key = key_file.read()
@@ -108,6 +110,17 @@ def disarm_sensor():
         fh.write('0')
     GPIO.output(STATE_LED, 0)
 
+def check_button_trigger():
+    while True:
+        GPIO.wait_for_edge(BUTTON, GPIO.FALLING)
+        print('Button pressed!')
+        with open(STATE_FILE, 'r') as fh:
+            state = fh.read()
+        if state == '1':
+            disarm_sensor()
+        else:
+            arm_sensor()
+
 class S(BaseHTTPRequestHandler):
     def do_GET(self):
         if self.path == '/on':
@@ -153,10 +166,13 @@ if __name__ == '__main__':
     try:
         check_pir_thread = multiprocessing.Process(target=check_pir)
         check_pir_thread.start()
+        check_button_trigger_thread = multiprocessing.Process(target=check_button_trigger)
+        check_button_trigger_thread.start()
         run_server_thread = multiprocessing.Process(target=run_server)
         run_server_thread.start()
     except KeyboardInterrupt:
         check_pir_thread.terminate()
+        check_button_trigger_thread.terminate()
         httpd.server_close()
         run_server_thread.terminate()
         GPIO.cleanup()
