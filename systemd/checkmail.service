@@ -3,7 +3,7 @@ Description=Check email periodically and notify
 After=network.target
 
 [Service]
-ExecStart=sudo python3 /home/pi/pi-scripts/checkmail.py
+ExecStart=sudo /usr/bin/python3 /home/pi/pi-scripts/checkmail.py
 # we may not have network yet, so retry until success
 Restart=on-failure
 RestartSec=3s
