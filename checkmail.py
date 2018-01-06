@@ -121,18 +121,18 @@ class S(BaseHTTPRequestHandler):
     def do_GET(self):
         if self.path == '/':
             self.send_response(200)
-            self.send_header('Contecnt-type', 'text/html')
+            self.send_header('Content-type', 'text/html')
             self.end_headers()
-            self.wfile.write('<html><body><p>Checking mail...'.encode('utf-8'))
+            self.wfile.write('Checking mail. '.encode('utf-8'))
             webreq_check_inner_thread = multiprocessing.Process(target=force_check_now)
             webreq_check_inner_thread.start()
             webreq_check_inner_thread.join()
-            self.wfile.write('Done!</p></body></html>'.encode('utf-8'))
+            self.wfile.write('Done!'.encode('utf-8'))
         else:
             self.send_response(404)
-            self.send_header('Contecnt-type', 'text/html')
+            self.send_header('Content-type', 'text/html')
             self.end_headers()
-            self.wfile.write('<html><body><p>Page not found</p></body></html>'.encode('utf-8'))
+            self.wfile.write('Page not found'.encode('utf-8'))
         
 def run_server(server_class=HTTPServer, handler_class=S, port=HTTP_PORT):
     server_address = ('', port)

@@ -25,7 +25,7 @@ MY_PHONE_HOSTNAME = '192.168.7.104'
 
 GPIO.setup(STATE_LED, GPIO.OUT)
 GPIO.setup(BUZZER, GPIO.OUT)
-GPIO.setup(BUTTON, GPIO.IN, pull_up_down=GPIO.PUD_UP)
+GPIO.setup(BUTTON, GPIO.IN, pull_up_down=GPIO.PUD_DOWN)
 
 with open('/home/pi/.maker_key', 'r') as key_file:
     maker_key = key_file.read()
@@ -112,7 +112,7 @@ def disarm_sensor():
 
 def check_button_trigger():
     while True:
-        GPIO.wait_for_edge(BUTTON, GPIO.FALLING)
+        GPIO.wait_for_edge(BUTTON, GPIO.RISING)
         print('Button pressed!')
         with open(STATE_FILE, 'r') as fh:
             state = fh.read()
