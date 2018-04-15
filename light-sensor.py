@@ -4,6 +4,7 @@ import requests
 import time
 
 PIN = 10
+INTERVAL = 60 # in seconds
 
 GPIO.setmode(GPIO.BCM)
 
@@ -21,8 +22,11 @@ def rc_time (PIN):
     return count
 
 if __name__ == '__main__':
-    light_level = rc_time(PIN)
-    print('Light Level: {}'.format(str(light_level)))
-    maker_url = 'https://maker.ifttt.com/trigger/light-sensor/with/key/' + maker_key + '?value1=' + str(light_level)
-    content = requests.get(maker_url).text
-    print(content)
+    while True:
+        light_level = rc_time(PIN)
+        print('Light Level: {}'.format(str(light_level)))
+        maker_url = 'https://maker.ifttt.com/trigger/light-sensor/with/key/' + maker_key + '?value1=' + str(light_level)
+        content = requests.get(maker_url).text
+        print(content)
+        print('======= DONE =======')
+        time.sleep(INTERVAL)
