@@ -1,5 +1,5 @@
 # Install build tools
-sudo apt-get install build-essential python-dev libjpeg-dev speedtest-cli
+sudo apt-get install build-essential python-dev libjpeg-dev libtiff5-dev libopenjp2-7-dev speedtest-cli
 
 modules=(RPi.GPIO httplib2 google-api-python-client oauth2client requests Pillow psutil)
 for module in ${modules[@]}; do
@@ -8,8 +8,6 @@ done
 
 #vcgencmd
 sudo pip3 install git+https://github.com/nicmcd/vcgencmd.git
-
-sudo apt-get install build-essential python-dev
 
 #Adafruit-DHT
 git clone https://github.com/adafruit/Adafruit_Python_DHT
