@@ -13,6 +13,7 @@ MCP_PINS_R = sorted(MCP_PINS, reverse=True)
 SPEED_LIMIT = 10
 NUM_LEDS = len(MCP_PINS)
 BLINK_SPEED = 0.03
+INTERVAL = 30 # in seconds
 
 with open('/home/pi/.maker_key', 'r') as key_file:
     maker_key = key_file.read()
@@ -28,8 +29,9 @@ def main():
             content = requests.get(maker_url).text
             print(content)
             speedometer(download)
-            os.system('sudo python /home/pi/pi-scripts/speedoled.py ' + str(download) + ' ' + str(upload))
-            exit()
+            os.system('sudo python3 /home/pi/pi-scripts/speedoled.py ' + str(download) + ' ' + str(upload))
+            print('======= DONE =======')
+            time.sleep(INTERVAL)
         except ValueError as err:
             print(err)
             print('Try {} - Trying again....'.format(str(i)))
@@ -88,4 +90,5 @@ def get_speedtest_results():
         raise ValueError('TEST FAILED')
 
 if __name__ == '__main__':
-    main()
+    while True:
+        main()
