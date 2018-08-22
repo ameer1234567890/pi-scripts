@@ -1,6 +1,8 @@
+"""Blinks an LED in a heartbeat style"""
+
 from __future__ import print_function
-import RPi.GPIO as GPIO
 import time
+import RPi.GPIO as GPIO
 
 PIN = 7
 
