@@ -1,4 +1,4 @@
-#!/usr/bin/env python
+#!/usr/bin/env python3
 """Blinks an LED in a heartbeat style"""
 
 from __future__ import print_function
