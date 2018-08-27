@@ -27,8 +27,9 @@ Description=Custom service
 After=network.target
 
 [Service]
+Environment=VIRTUAL_ENV=/home/pi/pi-scripts/env
 WorkingDirectory=/home/pi/pi-scripts
-ExecStart=/usr/bin/sudo /usr/bin/python3 /home/pi/pi-scripts/
+ExecStart=/usr/bin/sudo /home/pi/pi-scripts/env/bin/python3 /home/pi/pi-scripts/
 END_HEREDOC
 )
 
