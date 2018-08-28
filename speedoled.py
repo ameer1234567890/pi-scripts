@@ -1,4 +1,7 @@
+#!/usr/bin/sudo env/bin/python3
 # *-* coding: utf-8 -*-
+"""Helper script for displaying internet speed in SSD1306 display"""
+
 import Adafruit_SSD1306
 from PIL import Image
 from PIL import ImageDraw
@@ -6,7 +9,8 @@ from PIL import ImageFont
 import time
 import argparse
 
-parser = argparse.ArgumentParser(description='Example with non-optional arguments')
+parser = argparse.ArgumentParser(description='Example \
+    with non-optional arguments')
 parser.add_argument('downspeed', action="store", type=float)
 parser.add_argument('upspeed', action="store", type=float)
 results = parser.parse_args()
@@ -39,23 +43,28 @@ padding = 0
 shape_width = 20
 top = padding
 bottom = height-padding
-# Move left to right keeping track of the current x position for drawing shapes.
+# Move left to right keeping track of the current x position for
+# drawing shapes.
 x = padding
 
 # Load default font.
 font = ImageFont.load_default()
 
-# Alternatively load a TTF font.  Make sure the .ttf font file is in the same directory as the python script!
+# Alternatively load a TTF font.  Make sure the .ttf font file is in the
+# same directory as the python script!
 # Some other nice fonts to try: http://www.dafont.com/bitmap.php
-#font = ImageFont.truetype('Minecraftia.ttf', 8)
+# font = ImageFont.truetype('Minecraftia.ttf', 8)
 
 # Clear display.
 disp.clear()
 
 # Write two lines of text.
-draw.text((x, top),    'Down Speed: {} Mbps'.format(results.downspeed),  font=font, fill=255)
-draw.text((x, top+10), 'Up Speed: {} Mbps'.format(results.upspeed), font=font, fill=255)
-draw.text((x, top+22), 'T: {}'.format(time.strftime('%Y-%m-%d %H:%M')), font=font, fill=255)
+draw.text((x, top), 'Down Speed: {} Mbps'.format(results.downspeed),
+          font=font, fill=255)
+draw.text((x, top+10), 'Up Speed: {} Mbps'.format(results.upspeed),
+          font=font, fill=255)
+draw.text((x, top+22), 'T: {}'.format(time.strftime('%Y-%m-%d %H:%M')),
+          font=font, fill=255)
 
 # Display image.
 disp.image(image)

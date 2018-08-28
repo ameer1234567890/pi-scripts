@@ -1,4 +1,5 @@
-#!/usr/bin/env python3
+#!/usr/bin/sudo env/bin/python3
+# *-* coding: utf-8 -*-
 """Blinks an LED in a heartbeat style"""
 
 from __future__ import print_function

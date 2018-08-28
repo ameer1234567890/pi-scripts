@@ -1,3 +1,7 @@
+#!/usr/bin/sudo env/bin/python3
+# *-* coding: utf-8 -*-
+"""Alert on movement, using a PIR sensor"""
+
 from __future__ import print_function
 import time
 import RPi.GPIO as GPIO
@@ -21,7 +25,7 @@ HTTP_PORT = 7000
 NOTIFY_INTERVAL = 30
 LOG_FILE = '/home/pi/pi-scripts/pirsensor.log'
 MY_PHONE_HOSTNAME = '192.168.7.104'
-
+MAKER_BASE_URL = 'https://maker.ifttt.com/trigger/pir-movement/with/key/'
 
 GPIO.setup(STATE_LED, GPIO.OUT)
 GPIO.setup(BUZZER, GPIO.OUT)
@@ -30,14 +34,14 @@ GPIO.setup(BUTTON, GPIO.IN, pull_up_down=GPIO.PUD_DOWN)
 with open('/home/pi/.maker_key', 'r') as key_file:
     maker_key = key_file.read()
 
-if os.path.isfile(LOG_FILE) == False:
+if not os.path.isfile(LOG_FILE):
     with open(LOG_FILE, 'w') as fh:
         fh.write('%s' % time.time())
 
 with open(PID_FILE, 'w') as fh:
     fh.write(str(os.getpid()))
 
-if os.path.isfile(STATE_FILE) == False:
+if not os.path.isfile(STATE_FILE):
     with open(STATE_FILE, 'w') as fh:
         fh.write('1')
         GPIO.output(STATE_LED, 1)
@@ -50,12 +54,13 @@ if state == '1':
 else:
     GPIO.output(STATE_LED, 0)
 
+
 def check_pir():
     print('PIR Sensor is running! (CTRL+C to exit)')
     GPIO.setup(GPIO_PIR, GPIO.IN)
     num = 0
     status0 = 0
-    status1 = 0  
+    status1 = 0
     try:
         print('Waiting for our sensor...')
         while GPIO.input(GPIO_PIR) == 1:
@@ -82,7 +87,7 @@ def check_pir():
                             print('Not notifying since you are home!')
                         else:
                             print('Notifying about movement')
-                            maker_url = 'https://maker.ifttt.com/trigger/pir-movement/with/key/' + maker_key
+                            maker_url = MAKER_BASE_URL + maker_key
                             content = requests.get(maker_url).text
                             print(content)
                             with open(LOG_FILE, 'w') as fh:
@@ -90,7 +95,8 @@ def check_pir():
                     else:
                         print('Not notifying yet!')
                 else:
-                    print('Movement detected for {} time(s) but sensor is unarmed!'.format(num))
+                    print('Movement detected for {} time(s) but sensor is '
+                          'unarmed!'.format(num))
                 status1 = 1
             elif status0 == 0 and status1 == 1:
                 print('Ready to start!')
@@ -100,15 +106,18 @@ def check_pir():
         print('Exit!')
         GPIO.cleanup()
 
+
 def arm_sensor():
     with open(STATE_FILE, 'w') as fh:
         fh.write('1')
     GPIO.output(STATE_LED, 1)
 
+
 def disarm_sensor():
     with open(STATE_FILE, 'w') as fh:
         fh.write('0')
     GPIO.output(STATE_LED, 0)
+
 
 def check_button_trigger():
     while True:
@@ -121,18 +130,21 @@ def check_button_trigger():
         else:
             arm_sensor()
 
+
 class S(BaseHTTPRequestHandler):
     def do_GET(self):
         if self.path == '/on':
             self.send_response(302)
-            webreq_check_inner_thread = multiprocessing.Process(target=arm_sensor)
+            webreq_check_inner_thread = multiprocessing \
+                .Process(target=arm_sensor)
             webreq_check_inner_thread.start()
             webreq_check_inner_thread.join()
             self.send_header('Location', '/')
             self.end_headers()
         elif self.path == '/off':
             self.send_response(302)
-            webreq_check_inner_thread = multiprocessing.Process(target=disarm_sensor)
+            webreq_check_inner_thread = multiprocessing \
+                .Process(target=disarm_sensor)
             webreq_check_inner_thread.start()
             webreq_check_inner_thread.join()
             self.send_header('Location', '/')
@@ -141,19 +153,31 @@ class S(BaseHTTPRequestHandler):
             self.send_response(200)
             self.send_header('Contecnt-type', 'text/html')
             self.end_headers()
-            self.wfile.write('<html><head><meta name="viewport" content="width=device-width, initial-scale=1"><style>a{padding:40px 40px;text-decoration:none;text-transform:uppercase;text-align:center;font-family:monospace;display:block;width:5em;}a.armed{background:red;color:white;}a.disarmed{background:green;color:white;}</style></head><body><p>'.encode('utf-8'))
+            self.wfile.write('<html><head><meta name="viewport" '
+                             'content="width=device-width, initial-scale=1">'
+                             '<style>a{padding:40px 40px;text-decoration:'
+                             'none;text-transform:uppercase;text-align:'
+                             'center;font-family:monospace;display:block;'
+                             'width:5em;}a.armed{background:red;color:white;}'
+                             'a.disarmed{background:green;color:white;}'
+                             '</style></head><body><p>'.encode('utf-8'))
             with open(STATE_FILE, 'r') as fh:
                 state = fh.read()
             if state == '1':
-                self.wfile.write('<a class="armed" href="/off">Armed</a>'.encode('utf-8'))
+                self.wfile.write('<a class="armed" href="/off">Armed</a>'
+                                 .encode('utf-8'))
             else:
-                self.wfile.write('<a class="disarmed" href="/on">Disarmed</a>'.encode('utf-8'))
+                self.wfile.write('<a class="disarmed" href="/on">Disarmed</a>'
+                                 .encode('utf-8'))
             self.wfile.write('</p></body></html>'.encode('utf-8'))
         else:
             self.send_response(404)
             self.send_header('Contecnt-type', 'text/html')
             self.end_headers()
-            self.wfile.write('<html><body><p>Page not found. <a href="/">Check status of PIR sensor</a></p></body></html>'.encode('utf-8'))
+            self.wfile.write('<html><body><p>Page not found. <a href="/">'
+                             'Check status of PIR sensor</a></p></body></html>'
+                             .encode('utf-8'))
+
 
 def run_server(server_class=HTTPServer, handler_class=S, port=HTTP_PORT):
     server_address = ('', port)
@@ -162,11 +186,13 @@ def run_server(server_class=HTTPServer, handler_class=S, port=HTTP_PORT):
     print('Starting httpd...')
     httpd.serve_forever()
 
+
 if __name__ == '__main__':
     try:
         check_pir_thread = multiprocessing.Process(target=check_pir)
         check_pir_thread.start()
-        check_button_trigger_thread = multiprocessing.Process(target=check_button_trigger)
+        check_button_trigger_thread = multiprocessing \
+            .Process(target=check_button_trigger)
         check_button_trigger_thread.start()
         run_server_thread = multiprocessing.Process(target=run_server)
         run_server_thread.start()

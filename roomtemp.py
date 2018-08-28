@@ -1,4 +1,7 @@
+#!/usr/bin/sudo env/bin/python3
 # *-* coding: utf-8 -*-
+"""Log room temperature to Weather Underground PWS"""
+
 from __future__ import print_function
 import re
 import requests
@@ -10,11 +13,15 @@ exec(open('/home/pi/.wu_config.py').read())
 DHT_SENSOR = Adafruit_DHT.DHT11
 DHT_PIN = 18
 INTERVAL = 60
-WU_URL = "http://weatherstation.wunderground.com/weatherstation/updateweatherstation.php"
+WU_URL = "http://weatherstation.wunderground.com/weatherstation/" \
+         "updateweatherstation.php"
+TEMP_FILE_PATH = '/sys/bus/w1/devices/28-031663113dff/w1_slave'
+
 
 def c_to_f(input_temp):
     # convert input_temp from Celsius to Fahrenheit
     return (input_temp * 1.8) + 32
+
 
 def dew_point(celsius, humidity):
     a = 17.271
@@ -23,12 +30,13 @@ def dew_point(celsius, humidity):
     dew = (b * temp) / (a - temp)
     return dew
 
+
 while True:
 
     with open('/home/pi/.maker_key', 'r') as key_file:
         maker_key = key_file.read()
 
-    with open('/sys/bus/w1/devices/28-031663113dff/w1_slave', 'r') as temp_file:
+    with open(TEMP_FILE_PATH, 'r') as temp_file:
         for line in temp_file:
             line = re.findall(r't=.*', line)
             if line:
@@ -44,7 +52,8 @@ while True:
     dht_humidity, dht_temp = Adafruit_DHT.read_retry(DHT_SENSOR, DHT_PIN)
 
     if dht_humidity is not None and dht_temp is not None:
-        print('DHT Temperature: {0:0.1f}°C DHT Humidity: {1:0.1f}%'.format(dht_temp, dht_humidity))
+        print('DHT Temperature: {0:0.1f}°C DHT Humidity: {1:0.1f}%'
+              .format(dht_temp, dht_humidity))
         dewpoint = dew_point(int(float(ds_temp)), dht_humidity)
         print('Dew Point: {}°C'.format(str(round(dewpoint, 2))))
 
@@ -52,8 +61,8 @@ while True:
         print('Uploading data to Weather Underground...')
         weather_data = {
             'action': 'updateraw',
-            'ID': Config.STATION_ID,
-            'PASSWORD': Config.STATION_KEY,
+            'ID': Config.STATION_ID,  # noqa: F821
+            'PASSWORD': Config.STATION_KEY,  # noqa: F821
             'dateutc': 'now',
             'tempf': str(c_to_f(int(float(ds_temp)))),
             'humidity': str(dht_humidity),
@@ -66,7 +75,9 @@ while True:
 
         # Post to Google Spreadsheet via IFTTT
         print('Triggerring IFTTT event...')
-        maker_url = 'https://maker.ifttt.com/trigger/roomtemp/with/key/' + maker_key + '?value1=' + ds_temp + '&value2=' + str(dht_humidity) + '&value3=' + str(round(dewpoint, 2))
+        maker_url = 'https://maker.ifttt.com/trigger/roomtemp/with/key/' \
+            + maker_key + '?value1=' + ds_temp + '&value2=' \
+            + str(dht_humidity) + '&value3=' + str(round(dewpoint, 2))
         r = requests.get(maker_url)
         print(r.text)
     else:

@@ -1,3 +1,7 @@
+#!/usr/bin/sudo env/bin/python3
+# *-* coding: utf-8 -*-
+"""Display internet speed in SSD1306 display"""
+
 from __future__ import print_function
 import os
 import requests
@@ -13,23 +17,28 @@ MCP_PINS_R = sorted(MCP_PINS, reverse=True)
 SPEED_LIMIT = 10
 NUM_LEDS = len(MCP_PINS)
 BLINK_SPEED = 0.03
-INTERVAL = 30 # in seconds
+INTERVAL = 30  # in seconds
+MAKER_BASE_URL = 'https://maker.ifttt.com/trigger/speedtest/with/key/'
 
 with open('/home/pi/.maker_key', 'r') as key_file:
     maker_key = key_file.read()
 
+
 def main():
-    for i in range(1,4):
+    for i in range(1, 4):
         try:
             ping, download, upload = get_speedtest_results()
             print('Ping: {}'.format(str(ping)))
             print('Download: {}'.format(str(download)))
             print('Upload: {}'.format(str(upload)))
-            maker_url = 'https://maker.ifttt.com/trigger/speedtest/with/key/' + maker_key + '?value1=' + str(ping) + '&value2=' + str(download) + '&value3=' + str(upload)
+            maker_url = MAKER_BASE_URL + maker_key + '?value1=' \
+                + str(ping) + '&value2=' + str(download) \
+                + '&value3=' + str(upload)
             content = requests.get(maker_url).text
             print(content)
             speedometer(download)
-            os.system('sudo python3 /home/pi/pi-scripts/speedoled.py ' + str(download) + ' ' + str(upload))
+            os.system('./speedoled.py '
+                      + str(download) + ' ' + str(upload))
             print('======= DONE =======')
             time.sleep(INTERVAL)
         except ValueError as err:
@@ -39,8 +48,10 @@ def main():
         else:
             print('Ping: {}'.format(str(ping)))
 
+
 def speedometer(speed):
-    if speed > SPEED_LIMIT: speed = SPEED_LIMIT
+    if speed > SPEED_LIMIT:
+        speed = SPEED_LIMIT
     speed_percent = (speed * 100) / SPEED_LIMIT
     leds_lit = (NUM_LEDS * speed_percent) / 100
     leds_lit = int(math.ceil(leds_lit))
@@ -73,9 +84,10 @@ def speedometer(speed):
             mcp.output(PIN, 0)
         i += 1
 
+
 def get_speedtest_results():
-    ping = download = upload = None 
-    with os.popen('speedtest --simple') as speedtest_output:
+    ping = download = upload = None
+    with os.popen('env/bin/speedtest --simple') as speedtest_output:
         for line in speedtest_output:
             label, value, unit = line.split()
             if 'Ping' in label:
@@ -88,6 +100,7 @@ def get_speedtest_results():
         return ping, download, upload
     else:
         raise ValueError('TEST FAILED')
+
 
 if __name__ == '__main__':
     while True:
