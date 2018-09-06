@@ -1,0 +1,12 @@
+Adafruit-DHT==1.3.4
+Adafruit-GPIO==1.0.3
+Adafruit-SSD1306==1.6.2
+flake8==3.5.0
+google-api-python-client==1.7.4
+httplib2==0.11.3
+oauth2client==4.1.2
+Pillow==5.2.0
+requests==2.19.1
+RPi.GPIO==0.6.3
+speedtest==0.1.9
+-e git+https://github.com/nicmcd/vcgencmd.git#egg=vcgencmd
