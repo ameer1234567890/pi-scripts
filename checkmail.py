@@ -100,7 +100,7 @@ def blink_led():
 
 
 def error_led():
-    for i in range(4):
+    for _i in range(4):
         GPIO.output(MAIL_LED, True)
         time.sleep(1.5)
         GPIO.output(MAIL_LED, False)

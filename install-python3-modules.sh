@@ -3,7 +3,7 @@
 # Install build tools
 sudo apt-get install build-essential python-dev libjpeg-dev libtiff5-dev libopenjp2-7-dev
 
-pip3 install RPi.GPIO httplib2 google-api-python-client oauth2client requests Pillow speedtest flake8 pep8-naming
+pip3 install RPi.GPIO httplib2 google-api-python-client oauth2client requests Pillow speedtest flake8 pep8-naming flake8-bugbear
 
 #vcgencmd
 pip3 install git+https://github.com/nicmcd/vcgencmd.git

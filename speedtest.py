@@ -59,7 +59,7 @@ def speedometer(speed):
     mcp = MCP230xx.MCP23017()
     for PIN in MCP_PINS:
         mcp.setup(PIN, GPIO.OUT)
-    for i in range(0, 10):
+    for _i in range(0, 10):
         for PIN in MCP_PINS:
             mcp.output(PIN, 1)
             time.sleep(BLINK_SPEED)
