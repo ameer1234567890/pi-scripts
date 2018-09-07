@@ -5,6 +5,7 @@ flake8==3.5.0
 google-api-python-client==1.7.4
 httplib2==0.11.3
 oauth2client==4.1.2
+pep8-naming==0.7.0
 Pillow==5.2.0
 requests==2.19.1
 RPi.GPIO==0.6.3

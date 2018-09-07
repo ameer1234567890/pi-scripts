@@ -63,16 +63,16 @@ def speedometer(speed):
         for PIN in MCP_PINS:
             mcp.output(PIN, 1)
             time.sleep(BLINK_SPEED)
-            NEXT_PIN = PIN + 1
-            mcp.output(NEXT_PIN, 1)
+            next_pin = PIN + 1
+            mcp.output(next_pin, 1)
             mcp.output(PIN, 0)
             time.sleep(BLINK_SPEED)
         for PIN in MCP_PINS_R:
             mcp.output(PIN, 1)
             time.sleep(BLINK_SPEED)
-            PREV_PIN = PIN - 1
-            if (PREV_PIN != -1):
-                mcp.output(PREV_PIN, 1)
+            prev_pin = PIN - 1
+            if (prev_pin != -1):
+                mcp.output(prev_pin, 1)
                 mcp.output(PIN, 0)
                 time.sleep(BLINK_SPEED)
     i = 1

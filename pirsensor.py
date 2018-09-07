@@ -133,7 +133,7 @@ def check_button_trigger():
 
 
 class S(BaseHTTPRequestHandler):
-    def do_GET(self):
+    def do_GET(self):  # noqa: N802
         if self.path == '/on':
             self.send_response(302)
             webreq_check_inner_thread = multiprocessing \

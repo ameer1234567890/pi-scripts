@@ -135,7 +135,7 @@ def force_check():
 
 
 class S(BaseHTTPRequestHandler):
-    def do_GET(self):
+    def do_GET(self):  # noqa: N802
         if self.path == '/':
             self.send_response(200)
             self.send_header('Content-type', 'text/html')

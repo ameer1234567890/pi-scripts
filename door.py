@@ -81,7 +81,7 @@ def disarm_sensor():
 
 
 class S(BaseHTTPRequestHandler):
-    def do_GET(self):
+    def do_GET(self):  # noqa: N802
         if self.path == '/on':
             self.send_response(200)
             self.send_header('Contecnt-type', 'text/html')

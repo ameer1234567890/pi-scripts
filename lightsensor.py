@@ -17,13 +17,13 @@ with open('/home/pi/.maker_key', 'r') as key_file:
     maker_key = key_file.read()
 
 
-def rc_time(PIN):
+def rc_time(pin):
     count = 0
-    GPIO.setup(PIN, GPIO.OUT)
-    GPIO.output(PIN, 0)
+    GPIO.setup(pin, GPIO.OUT)
+    GPIO.output(pin, 0)
     time.sleep(0.1)
-    GPIO.setup(PIN, GPIO.IN)
-    while (GPIO.input(PIN) == 0):
+    GPIO.setup(pin, GPIO.IN)
+    while (GPIO.input(pin) == 0):
         count += 1
     return count
 

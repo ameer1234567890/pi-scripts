@@ -11,7 +11,7 @@ python:
   - pypy
   - pypy3
 install:
-  - pip install flake8
+  - pip install flake8 pep8-naming
   - flake8 --version
 script:
   - ./tests.sh
