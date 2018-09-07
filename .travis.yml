@@ -11,7 +11,11 @@ python:
   - pypy
   - pypy3
 install:
+  - if [[ $TRAVIS_PYTHON_VERSION < 3.5 ]]; then
+  - pip install flake8 pep8-naming
+  - else
   - pip install flake8 pep8-naming flake8-bugbear
+  - fi
   - flake8 --version
 script:
   - ./tests.sh
