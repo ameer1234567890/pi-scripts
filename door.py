@@ -2,7 +2,7 @@
 # *-* coding: utf-8 -*-
 """Check and alert of door movement"""
 
-from __future__ import print_function 
+from __future__ import print_function
 import RPi.GPIO as GPIO
 import os
 import time

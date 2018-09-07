@@ -23,8 +23,6 @@ while IFS= read -r file; do
 done < tmp
 rm tmp
 
-travis_check=0
-
 if [ "$has_errored" = true ]; then
   return 1
 else
