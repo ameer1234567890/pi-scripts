@@ -8,6 +8,7 @@ import RPi.GPIO as GPIO
 import os
 import multiprocessing
 import requests
+import ssl
 try:
     from BaseHTTPServer import BaseHTTPRequestHandler, HTTPServer
 except ImportError:
@@ -183,6 +184,8 @@ def run_server(server_class=HTTPServer, handler_class=S, port=HTTP_PORT):
     server_address = ('', port)
     global httpd
     httpd = server_class(server_address, handler_class)
+    httpd.socket = ssl.wrap_socket(httpd.socket, certfile='../tls/rpi1.pem',
+                                   server_side=True)
     print('Starting httpd...')
     httpd.serve_forever()
 
