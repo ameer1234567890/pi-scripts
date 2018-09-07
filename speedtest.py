@@ -17,7 +17,7 @@ MCP_PINS_R = sorted(MCP_PINS, reverse=True)
 SPEED_LIMIT = 10
 NUM_LEDS = len(MCP_PINS)
 BLINK_SPEED = 0.03
-INTERVAL = 30  # in seconds
+INTERVAL = 1800  # in seconds
 MAKER_BASE_URL = 'https://maker.ifttt.com/trigger/speedtest/with/key/'
 
 with open('/home/pi/.maker_key', 'r') as key_file:
