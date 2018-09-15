@@ -1,0 +1,3 @@
+[submodule "python-broadlink"]
+	path = python-broadlink
+	url = https://github.com/ameer1234567890/python-broadlink

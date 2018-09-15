@@ -12,3 +12,4 @@ requests==2.19.1
 RPi.GPIO==0.6.3
 speedtest==0.1.9
 -e git+https://github.com/nicmcd/vcgencmd.git#egg=vcgencmd
+-e git+https://github.com/mjg59/python-broadlink.git#egg=broadlink

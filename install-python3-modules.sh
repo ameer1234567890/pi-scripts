@@ -6,7 +6,10 @@ sudo apt-get install build-essential python-dev libjpeg-dev libtiff5-dev libopen
 pip3 install RPi.GPIO httplib2 google-api-python-client oauth2client requests Pillow speedtest flake8 pep8-naming flake8-bugbear
 
 #vcgencmd
-pip3 install git+https://github.com/nicmcd/vcgencmd.git
+pip3 install -e git+https://github.com/nicmcd/vcgencmd.git#egg=vcgencmd
+
+#broadlink
+pip3 install -e git+https://github.com/mjg59/python-broadlink.git#broadlink
 
 #Adafruit-DHT
 git clone https://github.com/adafruit/Adafruit_Python_DHT
