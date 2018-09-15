@@ -24,9 +24,9 @@ if rounds is None:
     rounds = DEFAULT_ROUNDS
 
 for _i in range(0, rounds):
-    os.system('env/bin/python3 python-broadlink/cli/broadlink_cli --type ' + TYPE +
-              ' --host ' + HOST + ' --mac ' + MAC + ' --turnon')
+    os.system('env/bin/python3 python-broadlink/cli/broadlink_cli --type '
+              + TYPE + ' --host ' + HOST + ' --mac ' + MAC + ' --turnon')
     time.sleep(INTERVAL)
-    os.system('env/bin/python3 python-broadlink/cli/broadlink_cli --type ' + TYPE +
-              ' --host ' + HOST + ' --mac ' + MAC + ' --turnoff')
+    os.system('env/bin/python3 python-broadlink/cli/broadlink_cli --type '
+              + TYPE + ' --host ' + HOST + ' --mac ' + MAC + ' --turnoff')
     time.sleep(DELAY_BETWEEN)
