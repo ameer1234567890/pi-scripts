@@ -13,7 +13,7 @@ check_tools(){
 check_tools
 
 has_errored=false
-find . ! -name "$(printf "*\n*")" -name '*.py' | grep -v './env' > tmp
+find . ! -name "$(printf "*\n*")" -name '*.py' | grep -v './env' | grep -v './python-broadlink' > tmp
 while IFS= read -r file; do
   printf "Running flake8 on %s.... Result: " "$file"
   flake8 --count "$file"
@@ -24,7 +24,7 @@ while IFS= read -r file; do
 done < tmp
 rm tmp
 
-find . ! -name "$(printf "*\n*")" -name '*.sh' | grep -v './env' > tmp
+find . ! -name "$(printf "*\n*")" -name '*.sh' | grep -v './env' | grep -v './python-broadlink' > tmp
 while IFS= read -r file; do
   printf "Running shellcheck on %s.... Result: " "$file"
   shellcheck "$file"
