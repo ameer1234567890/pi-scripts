@@ -1,6 +1,6 @@
 #!/usr/bin/sudo env/bin/python3
 # *-* coding: utf-8 -*-
-"""Check and alert of door movement"""
+"""Turn on light when door opens and off when door closes"""
 
 from __future__ import print_function
 import RPi.GPIO as GPIO
@@ -8,27 +8,26 @@ import os
 import time
 import datetime
 import multiprocessing
-import requests
 import ssl
+from yeelight import Bulb
 try:
     from BaseHTTPServer import BaseHTTPRequestHandler, HTTPServer
 except ImportError:
     from http.server import BaseHTTPRequestHandler, HTTPServer
 
+BULB_IP = "192.168.7.190"
 SENSOR_PIN = 14
 LED_PIN = 15
 STATE_FILE = 'door.state'
 READ_STATE_INTERVAL = 10
+KEEP_ON_FOR = 7
 PID_FILE = '/tmp/door.pid'
-HTTP_PORT = 26339
-MAKER_BASE_URL = 'https://maker.ifttt.com/trigger/door/with/key/'
+HTTP_PORT = 7400
 
 GPIO.setmode(GPIO.BCM)
 GPIO.setup(LED_PIN, GPIO.OUT)
 GPIO.setup(SENSOR_PIN, GPIO.IN, pull_up_down=GPIO.PUD_DOWN)
-
-with open('/home/pi/.maker_key', 'r') as key_file:
-    maker_key = key_file.read()
+bulb = Bulb(BULB_IP)
 
 with open(PID_FILE, 'w') as fh:
     fh.write(str(os.getpid()))
@@ -53,11 +52,14 @@ def check_door():
             with open(STATE_FILE, 'r') as fh:
                 state = fh.read()
             if state == '1':
+                GPIO.wait_for_edge(SENSOR_PIN, GPIO.FALLING)
+                print('Door opened at {}'.format(datetime.datetime.now()))
+                bulb.turn_on()
                 GPIO.wait_for_edge(SENSOR_PIN, GPIO.RISING)
-                print('Door movement at {}'.format(datetime.datetime.now()))
-                maker_url = MAKER_BASE_URL + maker_key
-                content = requests.get(maker_url).text
-                print(content)
+                print('Door closed at {}'.format(datetime.datetime.now()))
+                time.sleep(KEEP_ON_FOR)
+                bulb.turn_off()
+                print('Light turned off at {}'.format(datetime.datetime.now()))
                 time.sleep(1)
             elif state == '0':
                 time.sleep(READ_STATE_INTERVAL)
@@ -83,44 +85,48 @@ def disarm_sensor():
 class S(BaseHTTPRequestHandler):
     def do_GET(self):  # noqa: N802
         if self.path == '/on':
-            self.send_response(200)
-            self.send_header('Contecnt-type', 'text/html')
-            self.end_headers()
-            self.wfile.write('<html><body><p>Arming door sensor...'
-                             .encode('utf-8'))
-            webreq_check_inner_thread = multiprocessing. \
-                Process(target=arm_sensor)
+            self.send_response(302)
+            webreq_check_inner_thread = multiprocessing \
+                .Process(target=arm_sensor)
             webreq_check_inner_thread.start()
             webreq_check_inner_thread.join()
-            self.wfile.write('Done!</p></body></html>'.encode('utf-8'))
-        elif self.path == '/off':
-            self.send_response(200)
-            self.send_header('Contecnt-type', 'text/html')
+            self.send_header('Location', '/')
             self.end_headers()
-            self.wfile.write('<html><body><p>Disarming door sensor...'
-                             .encode('utf-8'))
+        elif self.path == '/off':
+            self.send_response(302)
             webreq_check_inner_thread = multiprocessing \
                 .Process(target=disarm_sensor)
             webreq_check_inner_thread.start()
             webreq_check_inner_thread.join()
-            self.wfile.write('Done!</p></body></html>'.encode('utf-8'))
-        elif self.path == '/status':
+            self.send_header('Location', '/')
+            self.end_headers()
+        elif self.path == '/':
             self.send_response(200)
             self.send_header('Contecnt-type', 'text/html')
             self.end_headers()
-            self.wfile.write('<html><body><p>'.encode('utf-8'))
+            self.wfile.write('<html><head><meta name="viewport" '
+                             'content="width=device-width, initial-scale=1">'
+                             '<style>a{padding:40px 40px;text-decoration:'
+                             'none;text-transform:uppercase;text-align:'
+                             'center;font-family:monospace;display:block;'
+                             'width:5em;}a.armed{background:red;color:white;}'
+                             'a.disarmed{background:green;color:white;}'
+                             '</style></head><body><p>'.encode('utf-8'))
             with open(STATE_FILE, 'r') as fh:
                 state = fh.read()
             if state == '1':
-                self.wfile.write('Armed'.encode('utf-8'))
+                self.wfile.write('<a class="armed" href="/off">Armed</a>'
+                                 .encode('utf-8'))
             else:
-                self.wfile.write('Disarmed'.encode('utf-8'))
+                self.wfile.write('<a class="disarmed" href="/on">Disarmed</a>'
+                                 .encode('utf-8'))
             self.wfile.write('</p></body></html>'.encode('utf-8'))
         else:
             self.send_response(404)
             self.send_header('Contecnt-type', 'text/html')
             self.end_headers()
-            self.wfile.write('<html><body><p>Page not found</p></body></html>'
+            self.wfile.write('<html><body><p>Page not found. <a href="/">'
+                             'Check status of PIR sensor</a></p></body></html>'
                              .encode('utf-8'))
 
 
@@ -128,7 +134,7 @@ def run_server(server_class=HTTPServer, handler_class=S, port=HTTP_PORT):
     server_address = ('', port)
     global httpd
     httpd = server_class(server_address, handler_class)
-    httpd.socket = ssl.wrap_socket(httpd.socket, certfile='../tls/rpi1.pem',
+    httpd.socket = ssl.wrap_socket(httpd.socket, certfile='../tls/device.pem',
                                    server_side=True)
     print('Starting httpd...')
     httpd.serve_forever()
