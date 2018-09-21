@@ -14,3 +14,4 @@ speedtest==0.1.9
 yeelight==0.4.3
 -e git+https://github.com/nicmcd/vcgencmd.git#egg=vcgencmd
 -e git+https://github.com/mjg59/python-broadlink.git#egg=broadlink
+-e git+https://github.com/pimoroni/py-smbus.git#egg=smbus\&subdirectory=library
