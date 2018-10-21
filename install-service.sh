@@ -32,6 +32,7 @@ END_HEREDOC
 )
 
 PART2=$(cat <<'END_HEREDOC'
+
 # we may not have network yet, so retry until success
 Restart=on-failure
 RestartSec=3s
