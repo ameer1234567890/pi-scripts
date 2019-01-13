@@ -11,7 +11,7 @@ INTERVAL = 1800  # 30 minutes
 DELAY_BETWEEN = 4
 DEFAULT_ROUNDS = 4
 TYPE = "0x2728"
-HOST = "192.168.7.146"
+HOST = "BroadLink_SPmini-T1-c1-b8-8d.lan"
 MAC = "8db8c10d43b4"
 
 parser = argparse.ArgumentParser(description='Example \
