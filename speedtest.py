@@ -37,7 +37,7 @@ def main():
             content = requests.get(maker_url).text
             print(content)
             speedometer(download)
-            os.system('./speedoled.py ' \
+            os.system('./speedoled.py '
                       + str(download) + ' ' + str(upload))
             print('======= DONE =======')
             time.sleep(INTERVAL)
@@ -73,7 +73,7 @@ def speedometer(speed):
             prev_pin = pin - 1
             if (prev_pin != -1):
                 mcp.output(prev_pin, 1)
-                mcp.output(PIN, 0)
+                mcp.output(pin, 0)
                 time.sleep(BLINK_SPEED)
     i = 1
     for pin in MCP_PINS:
