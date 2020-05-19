@@ -45,8 +45,8 @@ while True:
 
     ds_temp1 = int(round((ds_temp0 / 1000), 0))
     ds_temp2 = int(round((ds_temp0 / 100), 0))
-    ds_tempM = ds_temp2 % ds_temp1
-    ds_temp = str(ds_temp1) + '.' + str(ds_tempM)
+    ds_tempm = ds_temp2 % ds_temp1
+    ds_temp = str(ds_temp1) + '.' + str(ds_tempm)
     print('DS Temperature: {}°C'.format(str(ds_temp)))
 
     dht_humidity, dht_temp = Adafruit_DHT.read_retry(DHT_SENSOR, DHT_PIN)

@@ -37,8 +37,8 @@ def main():
             content = requests.get(maker_url).text
             print(content)
             speedometer(download)
-            os.system('./speedoled.py '
-                      + str(download) + ' ' + str(upload))
+            os.system('./speedoled.py ' +
+                      str(download) + ' ' + str(upload))
             print('======= DONE =======')
             time.sleep(INTERVAL)
         except ValueError as err:
@@ -57,31 +57,31 @@ def speedometer(speed):
     leds_lit = int(math.ceil(leds_lit))
     print('LEDs lit: {}/{}'.format(str(leds_lit), str(NUM_LEDS)))
     mcp = MCP230xx.MCP23017()
-    for PIN in MCP_PINS:
-        mcp.setup(PIN, GPIO.OUT)
+    for pin in MCP_PINS:
+        mcp.setup(pin, GPIO.OUT)
     for _i in range(0, 10):
-        for PIN in MCP_PINS:
-            mcp.output(PIN, 1)
+        for pin in MCP_PINS:
+            mcp.output(pin, 1)
             time.sleep(BLINK_SPEED)
-            next_pin = PIN + 1
+            next_pin = pin + 1
             mcp.output(next_pin, 1)
-            mcp.output(PIN, 0)
+            mcp.output(pin, 0)
             time.sleep(BLINK_SPEED)
         for PIN in MCP_PINS_R:
-            mcp.output(PIN, 1)
+            mcp.output(pin, 1)
             time.sleep(BLINK_SPEED)
-            prev_pin = PIN - 1
+            prev_pin = pin - 1
             if (prev_pin != -1):
                 mcp.output(prev_pin, 1)
                 mcp.output(PIN, 0)
                 time.sleep(BLINK_SPEED)
     i = 1
-    for PIN in MCP_PINS:
+    for pin in MCP_PINS:
         if leds_lit >= i:
-            mcp.output(PIN, 1)
+            mcp.output(pin, 1)
             time.sleep(BLINK_SPEED)
         else:
-            mcp.output(PIN, 0)
+            mcp.output(pin, 0)
         i += 1
 
 
